@@ -535,43 +535,46 @@ def compose(path):
     # ------------------------------------------------- lead trio
     gap = 8
     cw = (MEASURE - gap * 2) / 3
-    art_h = 68
+    art_h = 142
     tops = []
     for i, lead in enumerate(LEADS):
         cx = MARGIN + i * (cw + gap)
         # banner: kicker left, deck right, white on navy
-        s.band(cx, y, cx + cw, y + 13.5, NAVY)
-        s.ink(cx + 4, y + 3.2, lead["kicker"], ttf("sansb", 6.8), WHITE)
+        s.band(cx, y, cx + cw, y + 15.5, NAVY)
+        s.ink(cx + 4, y + 3.6, lead["kicker"], ttf("sansb", 7.6), WHITE)
         dw = s.span(lead["deck"], ttf("sansb", 5.4))
         s.ink(cx + cw - 4 - dw, y + 4.4, lead["deck"], ttf("sansb", 5.4), (232, 200, 108))
-        ART[lead["art"]](s, cx, y + 13.5, cw, art_h)
-        yy = s.headline(cx, y + 13.5 + art_h + 4, lead["head"], 11.4, cw, 3, INK, 1.04)
-        yy = s.copy(cx, yy + 2.5, lead["body"], 6.5, cw, 1.24, MID, 12)
+        ART[lead["art"]](s, cx, y + 15.5, cw, art_h)
+        yy = s.headline(cx, y + 15.5 + art_h + 4, lead["head"], 21.0, cw, 3, INK, .99)
+        yy = s.copy(cx, yy + 2.5, lead["body"], 10.2, cw, 1.32, MID, 5)
         s.ink(cx, yy + 2, lead["credit"], ttf("sans", 4.9), GREY)
         tops.append(yy + 8)
     y = max(tops) + 4
     s.bar_h(MARGIN, y, MARGIN + MEASURE, INK, 1.2)
-    y += 6
+    y += 4
 
+    print("Y-cards", round(y,1))
     # ------------------------------------------------- cards, four across
     per = 4
     gap = 7
     cw = (MEASURE - gap * (per - 1)) / per
-    art_h = 27
+    art_h = 24
     rows_n = (len(CARDS) + per - 1) // per
     for r0 in range(rows_n):
         group = CARDS[r0 * per:(r0 + 1) * per]
         tops = []
         for i, (region, kicker, deck, head, body, art) in enumerate(group):
             cx = MARGIN + i * (cw + gap)
-            s.band(cx, y, cx + cw, y + 11.5, NAVY)
-            s.ink(cx + 3, y + 2.8, kicker, ttf("sansb", 5.6), WHITE)
-            dw = s.span(deck, ttf("sansb", 4.4))
-            if dw < cw - 34:
-                s.ink(cx + cw - 3 - dw, y + 3.4, deck, ttf("sansb", 4.4), (232, 200, 108))
-            ART[art](s, cx, y + 11.5, cw, art_h)
-            yy = s.headline(cx, y + 11.5 + art_h + 3, head, 8.4, cw, 3, INK, 1.03)
-            yy = s.copy(cx, yy + 2, body, 5.9, cw, 1.2, MID, 8)
+            # no navy band here: the cards must read as secondary type on paper,
+            # so the three navy-bannered leads stay the only solid blocks on the page
+            s.bar_h(cx, y, cx + cw, RED, 1.6)
+            s.ink(cx, y + 3.4, kicker, ttf("sansb", 5.0), RED)
+            dw = s.span(deck, ttf("sans", 4.2))
+            if dw < cw - 30:
+                s.ink(cx + cw - dw, y + 4.0, deck, ttf("sans", 4.2), GREY)
+            ART[art](s, cx, y + 9.5, cw, art_h)
+            yy = s.headline(cx, y + 9.5 + art_h + 3, head, 12.6, cw, 3, INK, .99)
+            yy = s.copy(cx, yy + 2, body, 8.9, cw, 1.28, MID, 4)
             tops.append(yy)
         y = max(tops) + 7
         if r0 < rows_n - 1:
@@ -580,9 +583,10 @@ def compose(path):
     s.bar_h(MARGIN, y - 1, MARGIN + MEASURE, INK, 1.2)
     y += 5
 
+    print("Y-mb", round(y,1))
     # ------------------------------------------------- map + briefs
     mw = MEASURE * .335
-    mh = 148
+    mh = 86
     s.ink(MARGIN, y, "WHERE IT HAPPENED", ttf("sansb", 5.8), INK)
     ymap = y + 8
     draw_map(s, MARGIN, ymap, mw, mh)
@@ -599,7 +603,7 @@ def compose(path):
 
     bx = MARGIN + mw + 10
     bw = MEASURE - mw - 10
-    cols = 3
+    cols = 5
     cgap = 7
     bcw = (bw - cgap * (cols - 1)) / cols
     s.ink(bx, y, f"ALSO ON {WEEKDAY.title().upper()} {DATE} \u2014 {len(BRIEFS)} MORE STORIES",
@@ -614,41 +618,41 @@ def compose(path):
         yy = by
         for j, (region, head, source) in enumerate(chunk):
             n = start_no + c * per_col + j
-            s.ink(cx, yy, str(n), ttf("sansb", 5.0), RED)
-            yy2 = s.headline(cx + 9, yy - .5, head, 5.9, bcw - 9, 4, INK, 1.1)
-            s.ink(cx + 9, yy2 + .6, source, ttf("sans", 4.2), GREY)
-            yy = yy2 + 6.2
+            s.ink(cx, yy, str(n), ttf("sansb", 4.8), RED)
+            yy2 = s.headline(cx + 8, yy - .5, head, 8.2, bcw - 8, 3, INK, 1.03)
+            s.ink(cx + 8, yy2 + .5, source, ttf("sans", 4.2), GREY)
+            yy = yy2 + 5.6
         if c:
             s.bar_v(cx - cgap / 2, by - 1, max(by + 1, yy), HAIR, 1)
         deepest = max(deepest, yy)
 
-    y = max(ymap + mh + 12, deepest + 3) + 4
+    y = max(ymap + mh + 8, deepest + 2) + 2
 
+    print("Y-dc", round(y,1))
     # ------------------------------------------------- date check
     s.band(MARGIN, y, MARGIN + MEASURE, y + 34, WASH)
     s.bar_h(MARGIN, y, MARGIN + MEASURE, RED, 1.2)
     s.ink(MARGIN + 5, y + 3.4, "DATE CHECK", ttf("sansb", 5.8), RED)
-    chk = ("Left out, and why: the Shenzhen summit of Trump, Xi and Putin was held on 19 November, "
-           "not the 21st; the strike on three Kyiv bridges was overnight on the 20th; the missile "
-           "incursion into Poland was early on Friday, so what is reported here is NATO\u2019s "
-           "verdict. The Peru quake happened at 19:09 local on the 20th but at 00:09 UTC on the "
-           "21st, so it belongs to this day. Iran\u2019s strikes on Bahrain and the Guards\u2019 "
-           "claims about the targets are attributed to the sides that made them.")
-    rows = s.greedily(chk, ttf("serif", 6.0), MEASURE - 62)
-    chk_h = len(rows) * 7.4
+    chk = ("Left out, and why: the Shenzhen summit of Trump, Xi and Putin was on 19 November; "
+           "the strike on three Kyiv bridges was overnight on the 20th; the missile incursion "
+           "into Poland was early on Friday, so what is recorded here is NATO\u2019s verdict. "
+           "The Peru quake struck at 19:09 local on the 20th, which was 00:09 UTC on the 21st, "
+           "so it belongs to this day. Iran\u2019s claims about its targets are attributed to Iran.")
+    rows = s.greedily(chk, ttf("serif", 5.7), MEASURE - 62)
+    chk_h = len(rows) * 7.0
     if chk_h > 22:
-        s.band(MARGIN, y, MARGIN + MEASURE, y + 6 + chk_h + 4, WASH)
+        s.band(MARGIN, y, MARGIN + MEASURE, y + 5 + chk_h + 2, WASH)
     for i, r in enumerate(rows):
-        s.ink(MARGIN + 57, y + 4.6 + i * 7.4, r, ttf("serif", 6.0), MID)
-    y += max(24, 6 + chk_h + 4)
+        s.ink(MARGIN + 57, y + 3.8 + i * 7.0, r, ttf("serif", 5.7), MID)
+    y += max(18, 4 + chk_h + 1.5)
 
     # ------------------------------------------------- footer
-    s.bar_h(MARGIN, y, MARGIN + MEASURE, INK, 1.4)
-    y += 3.5
+    s.bar_h(MARGIN, y - 6.5, MARGIN + MEASURE, INK, 1.4)
+    y -= 4
     s.ink(MARGIN, y, "THE DAILY LEDGER", ttf("sansb", 5.4), MID)
     note = (f"{total} stories \u00b7 {len(REGIONS)} regions \u00b7 sources named beside each \u00b7 "
             "drawings made in code")
-    s.ink(MARGIN + MEASURE - s.span(note, ttf("sans", 5.0)), y + .4, note, ttf("sans", 5.0), MID)
+    s.ink(MARGIN + MEASURE - s.span(note, ttf("sans", 5.0)), y - .6, note, ttf("sans", 5.0), MID)
 
     out = s.reduce()
     out.save(path, "PNG", optimize=True)

@@ -15,7 +15,7 @@ reported, somewhere on that calendar day.
 
 ## What is on the page
 
-43 stories over 7 regions, in three tiers.
+35 stories over 7 regions, in three tiers.
 
 **Three illustrated leads.**
 
@@ -37,8 +37,8 @@ reported, somewhere on that calendar day.
   was issued.
 
 **Twelve cards with their own drawings** — Kyiv, Geneva, France, Hormuz, Riyadh,
-Manipur, Mexico, Washington, Dhaka, Ladakh, Ituri, Melbourne — and **28 numbered
-one-line stories** across three columns, keyed to a world map that carries one pin
+Manipur, Mexico, Washington, Dhaka, Ladakh, Ituri, Melbourne — and **20 numbered
+one-line stories** across five columns, keyed to a world map that carries one pin
 per story.
 
 ## Why it is laid out this way
